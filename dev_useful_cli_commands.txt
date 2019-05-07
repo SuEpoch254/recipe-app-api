@@ -1,0 +1,32 @@
+
+docker build .               # will build the image defined by Dockerfile
+docker-compose build         # will build the services in the docker-compose.yml file. Builds the images, does not start the containers
+
+
+docker-compose up            # docker-compose up will basically create a network of interconnected containers, that can talk to each other with name of container similar to a hostname.
+                             # Builds the images if the images do not exist and starts the containers. Done after changes in docker-compose file.
+docker-compose up --build    # it is forced to build the images even when not needed
+docker-compose up --no-build # skips the image build process
+
+docker-compose run app sh -c "django-admin.py startproject app ."
+docker-compose run app sh -c "python manage.py startapp core"
+docker-compose run app sh -c "python manage.py test"
+docker-compose run app sh -c "python manage.py makemigrations core"
+docker-compose run app sh -c "python manage.py test && flake8 --ignore=W391" # Note: ignore the empty line at the end error W391
+docker-compose run --rm app sh -c "python manage.py startapp user" # Note: --rm to remove immediately to save space, as soon as you do docker-compose down it would remove it anyways.
+
+ps -aux | grep "docker"
+
+docker ps -all
+
+docker container ls -all
+docker system prune --volumes
+# Note: deletes stopped containers, networks, volumes, dangling images
+# them all. Look at how to purge a single container
+
+docker image ls
+docker image rm 7025fb2cdc1d
+# Remove dangling images ( the <none> <none>)
+docker rmi $(docker images -q -f dangling=true)
+# Note: it won't remove those linked to a stopped container.
+

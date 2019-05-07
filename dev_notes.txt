@@ -1,0 +1,56 @@
+
+COURSE NOTES
+
+[36] Mocking
+    * When writting unit tests:
+        Never depend on external services, can't guarantee they'll be available.
+        and makes the test unpredictable and unreliable.
+    * For instance if we need to send an email in every test, we can use mocking.
+        That is by overriding the function that sends the email and replace it with
+        a mock object.
+    * Mocking will allow us to check if the intended function is called with the right
+        parameters, although we use a mock function to replace it during the test.
+
+[37] Add code/test for wait_for_db command
+    * We need to add a management command that allows us to wait for the database
+        to be available before continue with django to prevent it from crashing.
+    * We need to create test_commands.py (test TDD), create wait_for_db.py (feature),
+        and edit docker-compose.
+
+[40] Test in Broswer - Create a superuser
+    docker-compose run app sh -c "python manage.py createsuperuser" create credentials
+    docker-compose up
+    go to 127.0.0.1/admin login with the credentials
+
+[41] Create users app - create/edit user information and user auth tokens to be be used in API
+    * We remove migrations from user because we'll keep them in the core app.
+    * We remove admin from user because we'll keep them in the core app.
+    * We remove admin from user because we'll keep them in the core app.
+    * We remove tests from user because we'll create a new subfolder for tests
+    * Add tests folder inside user app with __init__.py file inside.
+    * add 'user', 'rest_framework', 'rest_framework.authtoken', to settings' INSTALLED_APPS
+    * enable rest framework in settings
+    * Create test_user_api.py
+    * Note: Every single test it runs it refreshes the database afterwards.
+
+[43] Add create user API endpoint
+    * Work on user/serializer.py, user/views.py, user/urls.py, app/urls.py
+    * In user/urls.py Remember to add app_name in order to be able to use the reverse function in the tests
+
+[44] Tests for create token API endpoint
+    * Definition: This is going to be an end point that you can make a hate TTP POST request and you can generate a temporary
+      auth token that you can then use to authenticate future request with the API. With our API we're going to be using token
+      authentication. So the way that you log in is use this API to generate a token and then you provide that token as the
+      authentication header for future requests which you want to authenticate. The benefit of this is you don't need to send a
+      user's username and password within every single request that you make. You just need to send it once to create the token
+      and then you can use that token for future requests. And if you ever want to revoke a token you can do that in a database.
+
+[48] Create new recipe app
+    * docker-compose run --rm app sh -c "python manage.py startapp recipe"
+    * Remove some files and folders that we'll keep in core: migrations, test (creating a folder), admin, models
+    * add app in settings
+
+[49] Add tag model to core app (we save all models in core app)
+    * The tag model is going to be veyr basic. It's just going to accept the name of the tag and the user who owns the tag.
+    * We're going to start by adding a unit test for getting the tag object as a string and then we're going
+    * Then we'll create the tag model and we're going to run our migrations to create the migration which would create the model in the db
